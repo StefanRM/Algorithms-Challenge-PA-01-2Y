@@ -1,0 +1,175 @@
+.___________. _______ .___  ___.      ___          __  
+|           ||   ____||   \/   |     /   \        /_ | 
+`---|  |----`|  |__   |  \  /  |    /  ^  \        | | 
+    |  |     |   __|  |  |\/|  |   /  /_\  \       | | 
+    |  |     |  |____ |  |  |  |  /  _____  \      | | 
+    |__|     |_______||__|  |__| /__/     \__\     |_| 
+
+Nume   : Maftei Stefan - Radu
+Grupa  : 324CD
+Materie: PA
+
+
+
+	Pentru fiecare problema am utilizat clasa MyScanner pentru a citi
+eficient din fisier. Clasa a fost pusa la dispozitie pe forumul de pe
+cs.curs.pub.ro.
+
+
+
+=== Problema 1 ===
+
+Tip Algoritm: Greedy;
+Complexitate: O(m * n), m - numarul de intervale, n - numarul de puncte.
+
+	Pentru aceasta problema am creat o clasa Interval, care contine 2
+membrii: left si right, referindu-se la capetele unui interval [a, b].
+	Dupa citire se vor sorta intervalele dupa capatul stang.
+	Algoritmul trece prin toate intervalele sortate, verificand cate
+puncte puncte poate acoperi. Se verifica un set de intervale, pana cand se
+ajunge la un interval al carui capat stang nu mai include punctul curent
+neacoperit.
+	In acel moment avem un interval care acopera cele mai multe puncte
+fata de restul intervalelor verificate. Se sar acele puncte deja acoperite,
+se incrementeaza numarul de intervale, si se verifica din nou cu un nou
+interval punctele ramase neacoperite.
+	Algoritmul se termina cand toate punctele sunt deja acoperite sau
+cand se termina intervalele, acestea din urma acoperind punctele ramase
+neacoperite.
+	Algoritmul este greedy, deoarece la fiecare pas optimizeaza numarul
+de puncte acoperite, iar atunci cand se gaseste un interval care nu mai
+acopera punctele curente avem deja un interval care acopera punctele curente
+neacoperite.
+	Complexitatea este O(m * n), deoarece se parcurg cele m intervale, iar
+in cadrul fiecaruia se parcurg punctele pentru a se numara cate puncte acopera
+intervalul curent.
+
+
+
+=== Problema 2 ===
+
+Tip Algoritm: Programare Dinamica;
+Complexitate: O(m * n * p * q), m, n, p, q - lungimile celor 4 string-uri
+	posibile reprezentand secventele de ADN;
+	      O(n ^ 4), n - lungimea celor 4 string-uri, in cazul in care
+	lungimile ar fi egale.
+
+	Pentru aceasta problema am utilizat algoritmul de intrepatrundere
+(interleaving) 4 siruri intr-un sir dat. Pentru 2 siruri, algoritmul
+functioneaza astfel:
+
+-> se initializeaza o matrice (lungime_sir1 + 1) x (lungime_sir2 + 1),
+deoarece se tine cont si de caracterul NULL ("");
+-> pe linii se afla caracterul NULL si caracterele in ordine a primului
+sir, iar pe coloane se afla caracterul NULL so caracterele in ordine a
+celui de al doilea sir;
+-> se completeaza matricea in functie de aparitia caracterului de pe
+pozitia liniei, respectiv coloanei in sirul de verificat si in functie
+de rezultatul anterior marcat in matrice;
+-> caracterul NULL fiind pe pozitia zero pe rand si pe coloana, se va
+verifica doar caracterul din celalalt sir in cazul in care verificam
+primul rand sau prima coloana din matrice;
+-> pentru o pozitie oarecare (i, j) din interiorul matricii se verifica daca
+unul din caracterele de pe linie sau coloana se afla pe locul (i + j - 1) din
+interiorul sirului, tinand cont ca caracterul anterior trebuie sa fi fost deja
+in interiorul sirului, adica matrice[i-1][j] in cazul in care caracterul de pe
+rand se potriveste, respectiv matrice[i][j-1] in cazul in care caracterul de pe
+coloana se potriveste;
+-> rezultatul se va gasi pe ultima pozitie din matrice.
+
+	Pentru cele 4 siruri vom avea o matrice cu 4 dimensiuni. Pentru o
+vizualizare eficienta a matricii, m-am folosit de faptul ca o matrice 4D este
+de fapt o matrice 2D de matrici 2D. Astfel ma folosesc de aceleasi principii
+ca in cazul algoritmului de intrepatrundere pentru 2 siruri. Voi verifica intai
+ca in matricea interna (k, l) sa se indeplineasca conditiile pentru sirurile 4
+si 3, apoi revenind in matricea mare sa verific pentru sirurile 2 si 1.
+	O conditie necesara aplicarii algoritmului este ca lungimea sirului de
+verificat sa fie egala cu suma lungimilor celor 4 siruri de verificat.
+	Inainte de completarea matricii, pe prima celula din matricea 4D
+(0, 0, 0, 0) voi pune TRUE, deoarece caracterele NULL ("") fac parte din sirul
+de verificat. Apoi folosesc observatia ca voi completa matricea doar daca verific
+un caracter diferit de NULL din matrice. Astfel se va completa pe rand matricea,
+utilizand aceleasi reguli ca la algoritmul pentru 2 siruri, doar adaptate la 4
+siruri. Rezultatul se va gasi pe ultima pozitie din matrice.
+	Acest algoritm functioneaza pentru 2, 3 si 4 siruri, punand la sirurile
+lipsa sirul vid (""). In matrice se va completa dimensiunea corespunzatoare doar
+cu 1, adica caracterul NULL, neinfluentand flow-ul algoritmului sau corectitudinea
+acestuia.
+	Algoritmul face parte din categoria programarii dinamice, deoarece folosete
+o matrice in care completeaza cu rezultatele subproblemelor si efectueaza o analiza
+bottom-up, de la subprobleme la problema mare.
+	Complexitatea este cea mentionata, deoarece se face o parcurgere pe 4
+dimensiuni.
+
+
+
+=== Problema 3 ===
+
+Tip Algoritm: Greedy;
+Complexitate: O(n), n - numarul de stropitori.
+
+	Pentru aceasta problema retin intr-o variabila left daca stropitoarea care va
+fi curenta stropeste in stanga. Astfel voi avea 3 cazuri:
+-> cazul primei stropitori;
+-> cazul ultimei stropitori;
+-> cazul restul stropitorilor.
+
+	Pentru prima stropitoare verific daca va stropi in stanga, adica sa nu
+depaseasca marginea stadionului. Apoi se va verifica de la prima stropitoare
+pana la ultima.
+	Daca stropitoarea curenta a fost marcata cu faptul ca va stropi in
+stanga, ramane de verificat daca urmatoarea stropitoare stropeste si ea in stanga,
+avand avantajul ca are distanta pana la stropitoarea vecina in stanga. Se va marca
+acest lucru.
+	Daca stropitoarea curenta a fost marcata cu faptul ca nu va stropi in
+stanga, se verifica daca aceasta poate stropi in dreapta. Daca poate, se verifica
+si urmatoarea stropitoare daca poate stropi in stanga, neacoperind spatiul stropit
+de stropitoarea curenta. Se va marca acest lucru.
+	Daca stropitoarea curenta poate stropi nici in stanga, nici dreapta,
+va fi blocata si se verifica daca urmatoarea stropitoare poate stropi in stanga. Se
+va marca acest lucru.
+	In final ramane de verificat ultima stropitoare. Daca aceasta a fost marcata
+ca stropeste in stanga, problema este gata, altfel se verifica daca poate stropi in
+dreapta fara a depasi marginea stadionului.
+	Algoritmul este greedy, deoarece la fiecare pas s-a retinut deja solutia
+optima, tinandu-se cont de constrangerile impuse si retinandu-se ce se intampla
+cu stropitoarea curenta in functie de stropitoarea anterioara.
+	Complexitatea este O(n) deoarece printr-o singura parcurgere a stropitorilor
+se decide ce se intampla cu fiecare.
+
+
+
+=== Bonus ===
+
+Tip Algoritm: Formula matematica;
+Complexitate: O(x + log n), n - nivelul maxim, x - diferenta dintre log(n) si
+	solutia data de algoritm.
+
+	Pentru aceasta problema vom folosi o relatie demonstrata printr-un
+formalism matematic.
+	Astfel notam cu f(d, k) numarul de nivele pe care il putem acoperi
+avand la dispozitie k vieti si d incercari posibile. Daca incercarea rezulta
+in esec (se pierde o viata) inseamna ca putem sa acoperim f(d - 1, k - 1)
+nivele, altfel putem acoperi f(d - 1, n) nivele. Va rezulta formula
+urmatoare de recurenta: f(d, n) = 1 + f(d - 1, n - 1) + f(d-1, n).
+	Se cauta o functie care este solutia acestei probleme: o notam cu g(d, n),
+g(d, n) = f(d, n + 1) - f(d, n) = g(d - 1, n) + g(d - 1, n - 1).
+	Se observa ca formula de recurenta a combinarilor este
+C(n, k) = C(n - 1, k) + C(n - 1, k - 1), unde C(n, k) sunt combinari de n luate
+cate k. Astfel => g(d, n) = C(d, n + 1).
+	Avem f(d, n) = g(d, n - 1) + g(d, n - 2) + ... + g(d, 0), si tinand cont
+de relatia nou-gasita si ca pentru f(0, x) = 0 vom avea:
+f(d, n) = C(d, n) + C(d, n - 1) + ... + C(d, 1) = Sum. Astfel pentru a gasi solutia
+problemei tot ce avem de facut e sa gasim valoarea lui d astfel incat
+f(d, K) >= N, K - vieti, N - nivelul maxim, Sum >= N.
+	O observatie interesanta este faptul ca daca numarul de vieti este mai mare
+ca log(N), adica avem suficiente oua, putem efectua o cautare binara, iar rezultatul
+va fi exact log(N), rotunjit la intregul mai mare (ceiling).
+	Astfel vom verifica daca numarul de vieti este mai mare ca 1 (daca este 1
+rezultatul este exact numarul de nivele, deoarece nu ne permitem sa pierdem nicio
+viata). Daca este mai mare ca 1, verificam si daca numarul de vieti este mai mare
+ca log(N). Daca nu avem suficiente oua ptr cautare binara, vom lua numarul de
+incercari egal cu 1 si vom creste pana cand suma de combinari va fi mai mare ca
+numarul de nivele N, astfel obtinand solutia.
+	Complexitatea este apropiata de log n, dar exista inca putini pasi care se
+executa in plus (acei pasi sunt exact diferenta pana la solutia oferita de algoritm).
